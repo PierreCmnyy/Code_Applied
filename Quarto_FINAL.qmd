@@ -618,11 +618,11 @@ Difference in difference without covariate. The results have been reported in a 
 ```{r}
 
 #To proceed, we use the function glm, doing a regression using a probit of COVERED on our explained variables
-logit_model_COVERED <- glm(COVERED ~ SUP2019 + VIRGINIA + TREAT, data=df, family = binomial(link="probit"))
-summary(logit_model_COVERED)
+probit_model_COVERED <- glm(COVERED ~ SUP2019 + VIRGINIA + TREAT, data=df, family = binomial(link="probit"))
+summary(probit_model_COVERED)
 
 #This command allows to compute the average marginal effects of being in Virginia in the post period treatment on the private insurance's rate
-avg_slopes(logit_model_COVERED)
+avg_slopes(probit_model_COVERED)
 
 ```
 
@@ -635,11 +635,11 @@ With the first result, we can only observe the sign of the variation and its sta
 #DiD estimation on PRIVATE
 
 #To proceed, we use the function glm, doing a regression using a probit of PRIVATE on our explained variables
-logit_model_PRIVATE <- glm(PRIVATE ~ SUP2019 + VIRGINIA + TREAT, data=df, family = binomial(link="probit"))
-summary(logit_model_PRIVATE)
+probit_model_PRIVATE <- glm(PRIVATE ~ SUP2019 + VIRGINIA + TREAT, data=df, family = binomial(link="probit"))
+summary(probit_model_PRIVATE)
 
 #This command allows to compute the average marginal effects of being in Virginia in the post period treatment on the coverage's rate
-avg_slopes(logit_model_PRIVATE)
+avg_slopes(probit_model_PRIVATE)
 ```
 
 The probit regression results indicate a modest crowd-out effect of private insurance following Virginia’s 2019 Medicaid expansion. The negative and statistically significant treatment coefficient (p-value = 0.016) suggests a decline in the probability of having a private coverage among the treated population. Average marginal effects estimate a 7.45 percentage point reduction in private insurance enrollment, consistent with a substitution effect where some low-income adults shifted from private plans to Medicaid. However, this effect remains limited compared to the overall increase in health coverage, aligning with prior research (Gruber & Sommers, 2019; Lyu & Wehby, 2022) showing that Medicaid expansion primarily reduced the uninsured rate rather than displacing private insurance.
@@ -672,16 +672,16 @@ Tm1 = ifelse(time_to_treat == -1, 1, 0),
 df$TREAT_Tm2 = df$Tm2 * df$VIRGINIA
 df$TREAT_Tm1 = df$Tm1 * df$VIRGINIA
 
-#A placebo test, which is a logit model, is useful to verify the parallel trends assumption
+#A placebo test, which is a probit model, is useful to verify the parallel trends assumption
 #between the control and treatment groups. If the estimators are not significants, we can assume parallel trends
-logit_placebo_test_on_covered = glm(COVERED~ SUP2019 + TREAT_Tm2 + TREAT_Tm1
+probit_placebo_test_on_covered = glm(COVERED~ SUP2019 + TREAT_Tm2 + TREAT_Tm1
 , data=df, family = binomial(link="probit") )
-summary(logit_placebo_test_on_covered)
+summary(probit_placebo_test_on_covered)
 
 
-logit_placebo_test_on_private = glm(PRIVATE~ SUP2019 + TREAT_Tm2 + TREAT_Tm1
+probit_placebo_test_on_private = glm(PRIVATE~ SUP2019 + TREAT_Tm2 + TREAT_Tm1
 , data=df, family = binomial(link="probit") )
-summary(logit_placebo_test_on_private)
+summary(probit_placebo_test_on_private)
 ```
 
 We have pre-treatment covariates that significantly impact the proportion of covered individuals and the proportion of privately insured individuals. This suggests a violation of the parallel pre-trend assumption. Therefore, we will select covariates that may explain the differences in group characteristics responsible for this violation.
@@ -842,11 +842,11 @@ The results have been reported in a LaTeX table, which you will find in the fina
 ```{r}
 
 #To proceed, we use the function glm, doing a regression using a probit of COVERED on our explained variables
-logit_model_COVERED_with_covariates <- glm(COVERED ~ AGE + WHITE + VIRGINIA + SUP2019 + TREAT, data=df, family = binomial(link="probit"))
-summary(logit_model_COVERED_with_covariates)
+probit_model_COVERED_with_covariates <- glm(COVERED ~ AGE + WHITE + VIRGINIA + SUP2019 + TREAT, data=df, family = binomial(link="probit"))
+summary(probit_model_COVERED_with_covariates)
 
 #This command allows to compute the average marginal effects of being in Virginia in the post period treatment on the private insurance's rate
-avg_slopes(logit_model_COVERED_with_covariates)
+avg_slopes(probit_model_COVERED_with_covariates)
 ```
 
 #### DiD estimation on Private Insured people
@@ -854,9 +854,9 @@ avg_slopes(logit_model_COVERED_with_covariates)
 ```{r}
 
 #To proceed, we use the function glm, doing a regression using a probit of PRIVATE on our explained variables
-logit_model_PRIVATE_with_covariates <- glm(PRIVATE ~ AGE + WHITE + VIRGINIA + SUP2019 + TREAT, data=df, family = binomial(link="probit"))
-summary(logit_model_PRIVATE_with_covariates)
+probit_model_PRIVATE_with_covariates <- glm(PRIVATE ~ AGE + WHITE + VIRGINIA + SUP2019 + TREAT, data=df, family = binomial(link="probit"))
+summary(probit_model_PRIVATE_with_covariates)
 
 #This command allows to compute the average marginal effects of being in Virginia in the post period treatment on the coverage's rate
-avg_slopes(logit_model_PRIVATE_with_covariates)
+avg_slopes(probit_model_PRIVATE_with_covariates)
 ```
